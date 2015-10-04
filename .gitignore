@@ -32,3 +32,5 @@ node_modules
 .ntvs_analysis.dat
 .vs/*
 *.sln
+bin/Microsoft.NodejsTools.WebRole.dll
+obj/*
