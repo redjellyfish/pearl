@@ -1,0 +1,25 @@
+{
+  "name": "reef",
+  "version": "1.0.0",
+  "description": "A small HTML markup based templating engine",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/redjellyfish/reef.git"
+  },
+  "keywords": [
+    "template",
+    "html",
+    "express",
+    "engine"
+  ],
+  "author": "redjellyfish <dev@redjellyfish.co.uk> (http://redjellyfish.co.uk)",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/redjellyfish/reef/issues"
+  },
+  "homepage": "https://github.com/redjellyfish/reef#readme"
+}
