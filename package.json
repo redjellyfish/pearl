@@ -35,5 +35,8 @@
     "htmlparser2": "^3.8.3",
     "jshint": "^2.8.0",
     "mocha": "^2.3.3"
+  },
+  "jshintConfig": {
+    "node": true
   }
 }
