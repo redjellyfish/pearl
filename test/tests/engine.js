@@ -94,6 +94,52 @@ describe("Engine", function () {
             expect(process('<if condition="!(!istrue && isfalse)">pass</if><else>fail</else>', model)).to.equal("pass");
         });
     });
+    
+    describe("resource", function () {
+        it("outputs script tag", function () {
+            expect(process('<resource type="js" path="/scripts/library"></resource>', {})).to.equal('<script src="/scripts/library.js" type="text/javascript"></script>');
+        });
+
+        it("outputs link tag", function () {
+            expect(process('<resource type="css" path="/styles/site"></resource>', {})).to.equal('<link href="/styles/site.css" rel="stylesheet">');
+        });
+    });
+
+    describe("component", function () {
+        it("is removed from dom", function () {
+            expect(process('<component id="test">test</component>', {})).to.equal("");
+        });
+
+        describe("include", function () {
+            describe("region", function () {
+                it("is removed from dom", function () {
+                    expect(process('<region id="test"></region>', {})).to.equal("");
+                });
+            });
+            
+            it("can create a component", function () {
+                expect(process('<component id="test">test</component><include name="test"/>', {})).to.equal("test");
+            });
+            
+            it("can accept arguments", function () {
+                expect(process('<component id="test" $arg>{{$.arg}}</component><include name="test" $arg="pass"/>', {})).to.equal("pass");
+            });
+            
+            it("can use model values", function () {
+                expect(process('<component id="test">{{title}}</component><include name="test"/>', { title: 'test' })).to.equal("test");
+            });
+
+            describe("export", function () {
+                it("can export into region", function () {
+                    expect(process('<region id="region"></region><component id="test" $region>|<export into="{{$.region}}"><div>hello</div></export>test</component><include name="test" $region="region"/>', {})).to.equal("<div>hello</div>|test");
+                });
+                
+                it("can export interpolated text into region", function () {
+                    expect(process('<region id="region"></region><component id="test" $region $text>|<export into="{{$.region}}"><div>{{$.text}}</div></export>test</component><include name="test" $region="region" $text="{{text}}"/>', { text: "pass" })).to.equal("<div>pass</div>|test");
+                });
+            });
+        });
+    });
 });
 
 
