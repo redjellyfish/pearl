@@ -18,5 +18,6 @@ function renderFile(path, model) {
 module.exports = {
     renderDOM: renderDOM,
     renderHTML: renderHTML,
-    renderFile: renderFile
+    renderFile: renderFile,
+    engine: engine
 };
