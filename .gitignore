@@ -34,3 +34,4 @@ node_modules
 *.sln
 bin/Microsoft.NodejsTools.WebRole.dll
 obj/*
+*.tmp
