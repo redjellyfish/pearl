@@ -172,6 +172,10 @@ describe("Engine", function () {
                 expect(exec('<component id="test" $arg>{{$.arg}}</component><include name="test" $arg="pass"/>', {})).to.equal("pass");
             });
             
+            it("arguments can have default values", function () {
+                expect(exec('<component id="test" $arg="default">{{$.arg}}</component><include name="test"/>', {})).to.equal("default");
+            });
+        
             it("can use model values", function () {
                 expect(exec('<component id="test">{{title}}</component><include name="test"/>', { title: 'test' })).to.equal("test");
             });
@@ -190,12 +194,32 @@ describe("Engine", function () {
                 expect(exec('<component id="test" $text><block id="content">{{$.text}}</block></component><include name="test" $text="fail"><block id="content">pass</block></include>', {})).to.equal("pass");
             });
             
+            it("can override blocks and include parent content before", function () {
+                expect(exec('<component id="test"><block id="content">hello</block></component><include name="test""><block id="content"><parent></parent>world</block></include>', {})).to.equal("helloworld");
+            });
+            
+            it("can override blocks and include parent content after", function () {
+                expect(exec('<component id="test"><block id="content">hello</block></component><include name="test""><block id="content">world<parent></parent></block></include>', {})).to.equal("worldhello");
+            });
+            
+            it("can override blocks and include parent content between", function () {
+                expect(exec('<component id="test"><block id="content">hello</block></component><include name="test""><block id="content">wor<parent></parent>ld</block></include>', {})).to.equal("worhellold");
+            });
+
             it("can perform complex actions (loop, condition)", function () {
                 executeHtmlTest("component-withloop");
             });
             
             it("can have nested includes", function () {
                 executeHtmlTest("include-nested");
+            });
+
+            it("can execute script block", function () {
+                expect(exec('<component id="test" $value><script type="text/pearl">$.value *= 2;</script>{{$.value}}</component><include name="test" $value="3"></include>', {})).to.equal("6");
+            });
+            
+            it("can execute script block - complex example", function () {
+                executeHtmlTest("include-scriptblock-complex");
             });
         });
     });
