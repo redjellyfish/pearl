@@ -1,0 +1,14 @@
+﻿<div class="model">
+    model = {
+    list: ["x", "p", "a", "s", "s"]
+    }
+</div>
+<div class="case">
+    <component id="test1" $list>
+        <for var="i" in="{{$.list}}"><if condition="i > 0">{{$.list[i]}}</if></for>
+    </component>
+    <include name="test1" $list="{{list}}"></include>
+</div>
+<div class="expected">
+    pass
+</div>

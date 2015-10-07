@@ -1,0 +1,19 @@
+﻿<div class="model">
+    model = {}
+</div>
+<div class="case">
+    <component id="test1">HelloWorld</component>
+    <component id="test2">
+        <include name="test1"></include>
+    </component>
+    <include name="test2"></include>
+    <component id="test3" $text>{{$.text}}</component>
+    <component id="test4" $text>
+        <include name="test3" $text="{{$.text}}">
+        </include>
+    </component>
+    |<include name="test4" $text="pass"></include>
+</div>
+<div class="expected">
+    HelloWorld|pass
+</div>
