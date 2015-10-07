@@ -1,0 +1,38 @@
+﻿<div class="model">
+    model = {}
+</div>
+<div class="case">
+    <component id="grid" $columns="3" $colwidths>
+        <script type="text/pearl">
+            var arr = [];
+            if($.colwidths) {
+            arr = $.colwidths.split(",")
+            } else {
+            var w = (12/$.columns)|0;
+            var q = 12;
+            for(var i = 0; i < $.columns - 1; i++) {
+            arr.push(w);
+            q-= w;
+            }
+            arr.push(q);
+            }
+            $.colwidths = arr;
+        </script>
+        <div class="row">
+            <for var="i" in="{{$.colwidths}}">
+                <div class="col col-md-{{$.colwidths[i]}}">
+                    <block id="grid-col-{{i+1}}"></block>
+                </div>
+            </for>
+        </div>
+    </component>
+    <include name="grid" $columns="2">
+        <block id="grid-col-1" override>
+            <p>I am in column 1</p>
+        </block>
+        <block id="grid-col-2" override>
+            <p>I am in column 2</p>
+        </block>
+    </include>
+</div>
+<div class="expected"></div>

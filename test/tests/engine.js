@@ -9,7 +9,7 @@ function exec(html, model, config) {
     return domutils.getOuterHTML(engine.process(htmlparser.parseDOM(html), model, config));
 }
 
-function executeHtmlTest(viewName) {
+function executeHtmlTest(viewName, actual) {
     var html = fs.readFileSync(__dirname + "/../views/" + viewName + ".html", "utf8");
     var dom = htmlparser.parseDOM(html);
     /*jslint evil: true */
@@ -21,13 +21,13 @@ function executeHtmlTest(viewName) {
         return el.attribs && "class" in el.attribs && el.attribs.class === "case";
     }, dom)[0];
     
-    var expected = domutils.find(function (el) {
+    var expected = actual || domutils.find(function (el) {
         return el.attribs && "class" in el.attribs && el.attribs.class === "expected";
     }, dom)[0];
     
     
     var outputHtml = domutils.getOuterHTML(engine.process(test.children, model)).replace(/\s/g, "");
-    var expectedtHtml = domutils.getOuterHTML(expected.children).replace(/\s/g, "");
+    var expectedtHtml = !actual ? domutils.getOuterHTML(expected.children).replace(/\s/g, "") : expected;
     
     expect(outputHtml).to.equal(expectedtHtml);
 }
@@ -219,7 +219,7 @@ describe("Engine", function () {
             });
             
             it("can execute script block - complex example", function () {
-                executeHtmlTest("include-scriptblock-complex");
+                executeHtmlTest("include-scriptblock-complex", '<divclass="row"><divclass="colcol-md-6"></div><divclass="colcol-md-6"></div></div>');
             });
         });
     });
