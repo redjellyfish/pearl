@@ -1,0 +1,26 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title><block id="page-title">{{title}}</block></title>
+
+    <block id="styles">
+        <region id="styles"></region>
+    </block>
+</head>
+<body>
+    <block id="page-menu">
+        <ul>
+            <foreach var="page" in="{{pages}}">
+                <li><a href="{{pages[page]}}">{{page}}</a></li>
+            </foreach>
+        </ul>
+    </block>
+    <block id="page-content">
+        Content
+    </block>
+    <block id="scripts">
+        <region id="scripts"></region>
+    </block>
+</body>
+</html>

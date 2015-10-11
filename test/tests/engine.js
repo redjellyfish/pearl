@@ -33,7 +33,7 @@ function executeHtmlTest(viewName, actual) {
 }
 
 describe("Engine", function () {
-     describe("text interpolation", function () {
+    describe("text interpolation", function () {
         it("works", function () {
             expect(exec('{{value}}', { value: "hello world" })).to.equal("hello world");
         });
@@ -121,10 +121,10 @@ describe("Engine", function () {
     });
     
     describe("resource", function () {
-        if(!process) process = {};
-        if(!process.env) process.env = {};
+        if (!process) process = {};
+        if (!process.env) process.env = {};
         process.env.NODE_ENV = "development";
-
+        
         it("outputs script tag", function () {
             expect(exec('<resource type="js" path="/scripts/library"></resource>', {})).to.equal('<script src="/scripts/library.js" type="text/javascript"></script>');
         });
@@ -135,7 +135,7 @@ describe("Engine", function () {
         
         it("uses min in production", function () {
             process.env.NODE_ENV = "production";
-
+            
             expect(exec('<resource type="css" path="/styles/site"></resource>', {})).to.equal('<link href="/styles/site.min.css" rel="stylesheet">');
         });
         
@@ -175,7 +175,7 @@ describe("Engine", function () {
             it("arguments can have default values", function () {
                 expect(exec('<component id="test" $arg="default">{{$.arg}}</component><include name="test"/>', {})).to.equal("default");
             });
-        
+            
             it("can use model values", function () {
                 expect(exec('<component id="test">{{title}}</component><include name="test"/>', { title: 'test' })).to.equal("test");
             });
@@ -187,6 +187,14 @@ describe("Engine", function () {
                 
                 it("can export interpolated text into region", function () {
                     expect(exec('<region id="region"></region><component id="test" $region $text>|<export into="{{$.region}}"><div>{{$.text}}</div></export>test</component><include name="test" $region="region" $text="{{text}}"/>', { text: "pass" })).to.equal("<div>pass</div>|test");
+                });
+                
+                it("can export without unique ID", function () {
+                    expect(exec('<region id="region"></region><component id="test"><export into="region">test</export></component><include name="test"></include><include name="test"></include>', {})).to.equal("testtest");
+                });
+                
+                it("can export with unique ID", function () {
+                    expect(exec('<region id="region"></region><component id="test"><export into="region" unique="1">test</export></component><include name="test"></include><include name="test"></include>', {})).to.equal("test");
                 });
             });
             
@@ -205,7 +213,7 @@ describe("Engine", function () {
             it("can override blocks and include parent content between", function () {
                 expect(exec('<component id="test"><block id="content">hello</block></component><include name="test""><block id="content">wor<parent></parent>ld</block></include>', {})).to.equal("worhellold");
             });
-
+            
             it("can perform complex actions (loop, condition)", function () {
                 executeHtmlTest("component-withloop");
             });
@@ -213,13 +221,33 @@ describe("Engine", function () {
             it("can have nested includes", function () {
                 executeHtmlTest("include-nested");
             });
-
+            
             it("can execute script block", function () {
                 expect(exec('<component id="test" $value><script type="text/pearl">$.value *= 2;</script>{{$.value}}</component><include name="test" $value="3"></include>', {})).to.equal("6");
             });
             
             it("can execute script block - complex example", function () {
                 executeHtmlTest("include-scriptblock-complex", '<divclass="row"><divclass="colcol-md-6"></div><divclass="colcol-md-6"></div></div>');
+            });
+            
+            it("can inherit from a layout file", function () {
+                var html = fs.readFileSync(__dirname + "/../views/" + "page" + ".pearl", "utf8");
+                var dom = htmlparser.parseDOM(html);
+                
+                var outputHtml = domutils.getOuterHTML(engine.process(dom, {
+                    title: "title text",
+                    pages: {
+                        home: "#home",
+                        contact: "#contact",
+                        about: "/about-us"
+                    }
+                }, {
+                    views: "/test/views",
+                    ext: "pearl"
+                }));
+
+                var expectHtml = fs.readFileSync(__dirname + "/../views/" + "page" + ".html", "utf8");
+                expect(outputHtml.replace(/\s/g, "")).to.equal(expectHtml.replace(/\s/g, ""));
             });
         });
     });

@@ -1,0 +1,6 @@
+﻿<include import="layout">
+    <block id="page-content">
+        <parent></parent>
+        Hello World
+    </block>
+</include>
