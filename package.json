@@ -1,10 +1,13 @@
 {
   "name": "pearl",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "A small HTML markup based templating engine",
   "main": "index.js",
   "scripts": {
-    "test": "mocha test/tests/**.js && jshint index.js test/tests lib"
+    "coverage": "istanbul cover node_modules/mocha/bin/_mocha test/tests/**.js -- -R spec",
+    "test": "mocha test/tests/**.js && jshint index.js test/tests lib",
+    "lint": "jshint index.js test/tests lib",
+    "validate": "npm ls"
   },
   "repository": {
     "type": "git",
@@ -23,6 +26,7 @@
   },
   "homepage": "https://github.com/redjellyfish/pearl#readme",
   "dependencies": {
+    "app-root-path": "^1.0.0",
     "debug": "^2.2.0",
     "domutils": "^1.5.1",
     "html-entities": "^1.1.3",
@@ -33,6 +37,7 @@
     "debug": "^2.2.0",
     "domutils": "^1.5.1",
     "htmlparser2": "^3.8.3",
+    "istanbul": "^0.3.22",
     "jshint": "^2.8.0",
     "mocha": "^2.3.3"
   },
